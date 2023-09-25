@@ -1,0 +1,7 @@
+agora-token-builder==1.0.0
+asgiref==3.4.1
+Django==3.2.20
+sqlparse==0.4.2
+tzdata==2021.5
+gunicorn==21.2.0
+pip==23.2.1
