@@ -6,5 +6,8 @@ sqlparse==0.4.2
 tzdata==2021.5
 gunicorn==21.2.0
 pip==23.2.1
+psycopg==3.1.10
+psycopg-binary==3.1.10
+psycopg2==2.9.6
 websocket-client==1.5.1
 whitenoise==6.5.0
