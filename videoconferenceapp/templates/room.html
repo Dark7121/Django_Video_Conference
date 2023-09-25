@@ -19,11 +19,17 @@
         </div>
 
         <div class="icon-wrapper">
-            <img class="control-icon" id="leave-btn" src="{% static 'img/leave.svg' %}" />
+            <a href="{% url 'chatroom' %}">
+            <img class="control-icon" id="chat-btn" src="{% static 'img/message.png' %}" />
         </div>
-    </section>
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="leave-btn" src="{% static 'img/leave.png' %}" />
+        </div>
+    </section> 
 </main>
 <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
 <script type="text/javascript" src="{% static 'js/AgoraRTC_N-4.18.3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/streams.js' %}" ></script>
+
 {% endblock content %}

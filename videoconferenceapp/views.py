@@ -73,3 +73,22 @@ def deleteMember(request):
         response_data = {'message': 'Member not found'}
 
     return JsonResponse(response_data)
+
+@csrf_exempt
+def send_message(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        message = data.get('message', '')
+        
+        # You can process and store the message as needed
+        # For example, you can save it in a database
+        
+        # You can also broadcast the message to all users in the room
+        # using WebSocket or a similar technology
+        
+        return JsonResponse({'status': 'success'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
+def chatroom(request):
+    return render(request, 'chatroom.html')

@@ -1,0 +1,128 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<main>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        #chat-box-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            height: 100vh; /* Adjust the height as needed */
+        }
+
+        #chat-box {
+            height: 400px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shaddow);
+            background-color: #84c9e2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #message-input-container {
+            display: flex;
+            align-items: center; /* Center vertically */
+        }
+
+        #message-input {
+            flex: 1; /* Take up remaining space */
+            width: 410px;
+            height: 43px;
+            border: 2px solid rgb(23, 29, 57);
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #send-button {
+            width: 30%;
+            max-width: 100px;
+            height: 43px;
+            border: 2px solid rgb(23, 29, 57);
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+    </style>
+    <h1>Chat Room</h1>
+    <section id="room-name-wrapper">
+        <p>Room Name: <span id="room-name"></span></p>
+    </section>
+    <h3> Hello!, it's ADMIN. I am currently working on this project. You can't chat here right now but you will be very soon. Thank you!! </h3>
+    <div id="chat-box-container">
+        <div id="chat-box"></div>
+        <div id="message-input-container">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</main>
+<script type="text/javascript" src="{% static 'js/AgoraRTC_N-4.18.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/streams.js' %}"></script>
+<script>
+    const agoraAppId = '7e786fb79394411a9425dd4ee820e450'; // Replace with your Agora App ID
+    const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+
+    // Function to join the Agora video call
+    function joinVideoCall() {
+        const channel = document.getElementById('room-name').innerText; // Replace with the room name
+        client.join(agoraAppId, channel, null, (uid) => {
+            // Handle successful join
+        }, (err) => {
+            // Handle join error
+        });
+    }
+
+    // Event listener for sending chat messages
+    const userName = sessionStorage.getItem('name');
+    const chatBox = document.getElementById('chat-box');
+    const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function sendMessage() {
+        const message = messageInput.value;
+        if (message.trim() !== '') {
+            client.channel.sendMessage({ text: message }).then(() => {
+                // Message sent successfully
+            }).catch((error) => {
+                // Handle message send error
+            });
+            messageInput.value = '';
+        }
+    }
+
+    // Event listener for receiving chat messages
+    client.on('ChannelMessage', (message, uid) => {
+        receiveMessage(uid, message.text);
+    });
+
+    function receiveMessage(sender, text) {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        // Use a regex to find URLs and replace them with clickable links
+        const textWithLinks = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+        messageElement.innerHTML = `${sender}: ${textWithLinks}`;
+        chatBox.appendChild(messageElement);
+
+        // Scroll to the bottom of the chat box to show the latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+{% endblock content %}
