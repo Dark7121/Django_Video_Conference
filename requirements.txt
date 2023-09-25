@@ -5,3 +5,5 @@ sqlparse==0.4.2
 tzdata==2021.5
 gunicorn==21.2.0
 pip==23.2.1
+websocket-client==1.5.1
+whitenoise==6.5.0
